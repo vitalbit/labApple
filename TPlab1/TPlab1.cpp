@@ -36,9 +36,18 @@ class Tree
 			int high = 5000;
 			int x=rand();
 			x=x-5000*(x/5000);
-			if (tree.size()+x>5000) x=5000-tree.size();
+			if ((int)tree.size()+x>5000) x=5000-tree.size();
 			for (int i=0; i!=x; i++)
 				tree.push_back(*(new Apple()));
+			return x;
+		}
+
+		int shake() {
+			int x=rand();
+			x=x-5000*(x/5000);
+			if ((int)tree.size()-x < 0) x=tree.size();
+			for (int i=0; i<x; i++)
+				tree.pop_back();
 			return x;
 		}
 
@@ -54,10 +63,12 @@ int _tmain(int argc, _TCHAR* argv[])
 	srand(time(NULL));
 	while (cmd!="quite")
 	{
-		cout << "Enter\ngrow  -- for new apples\ncount -- for count of apples\nquite -- for quite" << endl;
+		cout << "Enter\ngrow  -- for new apples\ncount -- for count of apples\nshake -- for apples down\nquite -- for quite" << endl;
 		cin >> cmd;
 		if (cmd=="grow") 
 			cout << "Has grown " << tr->grow() << " apples" << endl;
+		else if (cmd=="shake")
+			cout << tr->shake() << " apples have down" << endl;
 		else if (cmd=="count") 
 			cout << "Tree has " << tr->count() << " apples" << endl;
 		else if (cmd!="quite") cout << "Wrong command!" << endl;

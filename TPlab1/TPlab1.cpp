@@ -32,7 +32,8 @@ class Tree
 	private:
 		vector <Apple> tree;
 		int allSeeds;
-	public:
+		bool blossom;
+
 		Tree(int n) {
 			allSeeds = 0;
 			if (n > 5000) n = 5000;
@@ -43,15 +44,25 @@ class Tree
 			}
 		}
 
+	public:
+
+		Tree() {
+			allSeeds = 0;
+			blossom = false;
+		}
+
 		int grow() {
-			int high = 5000;
-			int x=rand();
-			x=x-5000*(x/5000);
-			if ((int)tree.size()+x>5000) x=5000-tree.size();
-			for (int i=0; i!=x; i++)
-			{
-				tree.push_back(*(new Apple()));
-				allSeeds += (tree.end()-1)->getSeeds();
+			int x = 0;
+			if (blossom) {
+				int high = 5000;
+				x=rand();
+				x=x-5000*(x/5000);
+				if ((int)tree.size()+x>5000) x=5000-tree.size();
+				for (int i=0; i!=x; i++)
+				{
+					tree.push_back(*(new Apple()));
+					allSeeds += (tree.end()-1)->getSeeds();
+				}
 			}
 			return x;
 		}
@@ -75,16 +86,24 @@ class Tree
 		int countSeeds() {
 			return allSeeds;
 		}
+
+		bool blossomTree() {
+			if (!blossom) {
+				blossom = true;
+				return true;
+			}
+			else return false;
+		}
 };
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 	srand(time(NULL));
-	Tree *tr = new Tree(0); 
+	Tree *tr = new Tree(); 
 	string cmd="";
 	while (cmd!="quite")
 	{
-		cout << "Enter\ngrow  -- for new apples\ncount -- for count of apples\nshake -- for apples down\nseeds -- for count of seeds\nquite -- for quite" << endl;
+		cout << "Enter\ngrow  -- for new apples\ncount -- for count of apples\nshake -- for apples down\nseeds -- for count of seeds\nblossom -- for blossomed tree\nquite -- for quite" << endl;
 		cin >> cmd;
 		if (cmd=="grow") 
 			cout << "Has grown " << tr->grow() << " apples" << endl;
@@ -94,6 +113,11 @@ int _tmain(int argc, _TCHAR* argv[])
 			cout << "Tree has " << tr->count() << " apples" << endl;
 		else if (cmd=="seeds")
 			cout << "Count of seeds = " << tr->countSeeds() << endl;
+		else if (cmd=="blossom") {
+			if (tr->blossomTree())
+				cout << "Tree has blossomed" << endl;
+			else cout << "Tree has already blossomed" << endl;
+		}
 		else if (cmd!="quite") cout << "Wrong command!" << endl;
 	}
 	return 0;
